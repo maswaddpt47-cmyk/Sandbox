@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAF – Espace Allocataire (Démonstration pédagogique)</title>
+<style>
+  :root {
+    --caf-blue: #0B8FC4;
+    --caf-blue-dark: #086F9C;
+    --caf-navy: #1B3D6B;
+    --caf-header: #1A1A1A;
+    --bg: #EEF0F2;
+    --card-bg: #FFFFFF;
+    --text: #333333;
+    --text-light: #6B7280;
+    --border: #DDE1E5;
+    --demo-red: #D32F2F;
+    --radius: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* Bandeau de démonstration, toujours visible */
+  .demo-banner {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--demo-red);
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    padding: 8px 10px;
+    text-transform: uppercase;
+  }
+
+  .app-header {
+    background: var(--caf-header);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wordmark {
+    background: var(--caf-blue);
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 1.05rem;
+  }
+
+  .app-header .subtitle {
+    font-size: 0.78rem;
+    color: #C9CDD3;
+  }
+
+  .app-header .logout {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid #4A4A4A;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .app-header .logout:hover { background: #2A2A2A; }
+
+  .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* --- Écran de connexion --- */
+  .welcome-banner {
+    background: var(--caf-navy);
+    color: #fff;
+    padding: 18px 16px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  .welcome-banner h1 {
+    font-size: 1.05rem;
+    margin: 0;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0 0 16px;
+    letter-spacing: 0.03em;
+  }
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: var(--text-light);
+  }
+
+  input[type="text"], input[type="password"], input[type="number"], select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    background: var(--caf-blue);
+    color: #fff;
+    border: none;
+    padding: 13px 16px;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn:hover { background: var(--caf-blue-dark); }
+  .btn.secondary {
+    background: transparent;
+    color: var(--caf-blue);
+    border: 1px solid var(--caf-blue);
+  }
+  .btn.secondary:hover { background: #EAF6FC; }
+  .btn.link {
+    background: none;
+    color: var(--caf-blue);
+    text-align: center;
+    padding: 10px;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    margin: 18px 0;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .fc-note {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  /* --- Accueil --- */
+  .user-name {
+    color: var(--caf-blue);
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    margin: 4px 0 6px;
+    font-weight: 400;
+  }
+  .user-sub {
+    font-size: 0.85rem;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .user-sub a { color: var(--caf-blue); text-decoration: none; }
+
+  .payment-card {
+    background: var(--caf-blue);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 22px 16px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .payment-card .label { font-size: 1rem; margin-bottom: 4px; }
+  .payment-card .date { font-size: 0.82rem; opacity: 0.9; margin-bottom: 10px; }
+  .payment-card .amount { font-size: 2.1rem; font-weight: 700; margin-bottom: 8px; }
+  .payment-card .details-link {
+    color: #fff;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .qf-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 4px;
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+  }
+  .qf-line b { font-size: 1.05rem; }
+  .info-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+    font-size: 0.7rem;
+    margin-left: 4px;
+    cursor: default;
+  }
+
+  .row-list { margin-bottom: 14px; }
+  .row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: #F4F5F7;
+    border-radius: var(--radius);
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+  }
+  .row-item.active-row {
+    background: var(--caf-blue);
+    color: #fff;
+  }
+  .row-item .chevron { font-size: 1rem; }
+
+  .pdf-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: var(--caf-blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 6px;
+  }
+  .pdf-btn:hover { background: var(--caf-blue-dark); }
+
+  .preview-panel {
+    display: none;
+    background: #fff;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+  .preview-panel.open { display: block; }
+  .preview-panel .watermark {
+    color: var(--demo-red);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* --- Accordéon --- */
+  .accordion-section {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .acc-header {
+    width: 100%;
+    background: #fff;
+    border: none;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .acc-header .arrow {
+    color: var(--caf-blue);
+    transition: transform 0.2s ease;
+    font-size: 0.9rem;
+  }
+  .acc-header.open .arrow { transform: rotate(180deg); }
+  .acc-body {
+    display: none;
+    padding: 0 16px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .acc-body.open { display: block; padding-top: 14px; }
+
+  .acc-body p { font-size: 0.88rem; line-height: 1.5; margin: 0 0 10px; }
+  .acc-body ul { margin: 0 0 10px; padding-left: 18px; font-size: 0.88rem; line-height: 1.6; }
+  .acc-body .mini-btn {
+    display: inline-block;
+    background: var(--caf-blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .acc-body .mini-btn:hover { background: var(--caf-blue-dark); }
+
+  .agenda-item, .news-item, .contact-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.87rem;
+  }
+  .agenda-item:last-child, .news-item:last-child, .contact-item:last-child { border-bottom: none; }
+  .agenda-item .date-chip {
+    background: var(--caf-navy);
+    color: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    height: fit-content;
+    white-space: nowrap;
+  }
+
+  .footer-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin: 20px 0 10px;
+  }
+
+  /* --- Simulateur --- */
+  .sim-intro {
+    font-size: 0.88rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+
+  .result-amount {
+    background: var(--caf-navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 26px 16px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .result-amount .figure { font-size: 2.4rem; font-weight: 700; }
+  .result-amount .caption { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+
+  .disclaimer {
+    background: #FDEDED;
+    border: 1px solid #F3B9B9;
+    color: #8A1F1F;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .chat-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--caf-navy);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="demo-banner">⚠ Environnement de démonstration — Données fictives — Usage pédagogique uniquement</div>
+
+  <div class="app-header">
+    <span class="wordmark">caf</span>
+    <span class="subtitle">Mon compte allocataire (démo)</span>
+    <button class="logout" id="logoutBtn" style="display:none;">Se déconnecter</button>
+  </div>
+
+  <div class="container">
+
+    <!-- ÉCRAN 1 : CONNEXION -->
+    <section id="screen-login" class="screen active">
+      <div class="welcome-banner">
+        <h1>Bienvenue sur le portail de démonstration des allocations familiales</h1>
+      </div>
+
+      <div class="card">
+        <h2>Connexion allocataire (fictive)</h2>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-top:-8px;">Aucun identifiant réel n'est requis : saisissez n'importe quelle valeur.</p>
+        <form id="loginForm">
+          <label for="loginId">Identifiant (fictif)</label>
+          <input type="text" id="loginId" placeholder="ex : allocataire.demo" autocomplete="off">
+          <label for="loginPwd">Mot de passe (fictif)</label>
+          <input type="password" id="loginPwd" placeholder="••••••••" autocomplete="off">
+          <button type="submit" class="btn">Se connecter</button>
+        </form>
+        <div class="divider">OU</div>
+        <div class="fc-note">Connexion simplifiée pour la démonstration</div>
+        <button type="button" class="btn secondary" id="quickLoginBtn">Accéder à la démo sans saisie</button>
+      </div>
+
+      <div class="footer-hint">Support pédagogique — Conseil Départemental 47 — Aucune donnée transmise, tout est simulé localement dans votre navigateur.</div>
+    </section>
+
+    <!-- ÉCRAN 2 : ACCUEIL -->
+    <section id="screen-home" class="screen">
+      <h2 class="user-name">JEAN DUPONT</h2>
+      <p class="user-sub">Vous autorisez <b>Marie DUPONT</b> à <a href="#" onclick="return false;">gérer votre dossier</a> (exemple fictif)</p>
+
+      <div class="accordion-section">
+        <button class="acc-header open" data-target="acc-1">Mes paiements et mes droits <span class="arrow">▾</span></button>
+        <div class="acc-body open" id="acc-1">
+          <div class="payment-card">
+            <div class="label">Mon dernier paiement</div>
+            <div class="date">le 06/07/2026</div>
+            <div class="amount">152,30 €</div>
+            <button class="details-link" onclick="togglePreview()">Voir le détail ›</button>
+            <div class="preview-panel" id="previewPanel">
+              <div class="watermark">Document fictif — non officiel</div>
+              Prestation simulée : Aide au logement (démo)<br>
+              Période : Juin 2026<br>
+              Montant versé : 152,30 €<br>
+              Bénéficiaire : Jean DUPONT (personnage fictif)
+            </div>
+          </div>
+
+          <div class="qf-line">
+            <span>Mon quotient familial <span class="info-dot">i</span> :</span>
+            <b>1 042 €</b>
+          </div>
+
+          <div class="row-list">
+            <button class="row-item" onclick="alert('Écran fictif — dans la vraie démonstration, ceci afficherait le détail des paiements et droits.')">Mes paiements et droits <span class="chevron">›</span></button>
+            <button class="row-item active-row" onclick="alert('Écran fictif — attestations simulées, aucun document réel.')">Mes attestations <span class="chevron">›</span></button>
+            <button class="row-item" onclick="alert('Écran fictif — ressources déclarées simulées.')">Mes ressources <span class="chevron">›</span></button>
+          </div>
+
+          <button class="pdf-btn" onclick="togglePreview()">📄 Télécharger mon relevé de compte (fictif)</button>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="acc-2">👤 Mon profil <span class="arrow">▾</span></button>
+        <div class="acc-body" id="acc-2">
+          <p><b>Nom :</b> DUPONT — <b>Prénom :</b> Jean (personnage fictif)</p>
+          <p><b>Adresse :</b> 12 rue de l'Exemple, 47000 Agen (adresse fictive)</p>
+          <p><b>Téléphone :</b> 06 00 00 00 00 (numéro fictif)</p>
+          <button class="mini-btn" onclick="alert('Formulaire fictif — modification désactivée en démonstration.')">Modifier mes coordonnées</button>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="acc-3">💬 Contacter ma Caf <span class="arrow">▾</span></button>
+        <div class="acc-body" id="acc-3">
+          <div class="contact-item">✉️ Envoyer un message (fictif) — réponse simulée sous 48h</div>
+          <div class="contact-item">📞 Nous appeler — 32 30 (exemple, service non réel dans cette démo)</div>
+          <div class="contact-item">📅 Prendre rendez-vous (fictif) avec un conseiller</div>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="acc-4">🧾 Mes démarches <span class="arrow">▾</span></button>
+        <div class="acc-body" id="acc-4">
+          <p>Exemples de démarches disponibles dans cette démonstration :</p>
+          <ul>
+            <li>Déclarer un changement de situation (fictif)</li>
+            <li>Faire une simulation d'aide au logement</li>
+          </ul>
+          <button class="mini-btn" onclick="goTo('screen-sim')">Faire une simulation ›</button>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="acc-5">🗓️ Mon agenda <span class="arrow">▾</span></button>
+        <div class="acc-body" id="acc-5">
+          <div class="agenda-item"><span class="date-chip">22/07</span> Rendez-vous conseiller (fictif, 10h00)</div>
+          <div class="agenda-item"><span class="date-chip">05/08</span> Échéance déclaration trimestrielle (exemple)</div>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="acc-6">📰 La Caf m'informe <span class="arrow">▾</span></button>
+        <div class="acc-body" id="acc-6">
+          <div class="news-item">📌 Exemple d'actualité : « Les nouveaux montants forfaitaires (illustration pédagogique) »</div>
+          <div class="news-item">📌 Exemple d'actualité : « Comment simuler mes droits (démonstration) »</div>
+        </div>
+      </div>
+
+      <div class="footer-hint">Toutes les informations affichées sont fictives et générées pour un atelier de médiation numérique.</div>
+    </section>
+
+    <!-- ÉCRAN 3 : SIMULATEUR -->
+    <section id="screen-sim" class="screen">
+      <div class="card">
+        <h2>Simulateur d'aide au logement (démo)</h2>
+        <p class="sim-intro">Renseignez des valeurs fictives pour découvrir le fonctionnement d'un simulateur. Aucun calcul réel n'est effectué.</p>
+        <form id="simForm">
+          <label for="simSituation">Situation familiale</label>
+          <select id="simSituation">
+            <option value="seul">Personne seule</option>
+            <option value="couple">Couple</option>
+            <option value="famille">Famille monoparentale</option>
+          </select>
+
+          <label for="simEnfants">Nombre d'enfants à charge</label>
+          <input type="number" id="simEnfants" min="0" max="10" value="0">
+
+          <label for="simRevenu">Revenu mensuel net (€, fictif)</label>
+          <input type="number" id="simRevenu" min="0" step="10" value="1200">
+
+          <label for="simLoyer">Loyer mensuel (€, fictif)</label>
+          <input type="number" id="simLoyer" min="0" step="10" value="500">
+
+          <button type="submit" class="btn">Estimer mes droits (fictif)</button>
+          <button type="button" class="btn link" onclick="goTo('screen-home')">‹ Retour à l'accueil</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ÉCRAN 4 : RÉSULTAT -->
+    <section id="screen-result" class="screen">
+      <div class="card">
+        <h2>Résultat de la simulation (fictif)</h2>
+        <div class="result-amount">
+          <div class="figure" id="resultFigure">0 €</div>
+          <div class="caption">estimation mensuelle fictive</div>
+        </div>
+        <div class="disclaimer">
+          ⚠ Ce résultat est généré par une formule pédagogique simplifiée. Il ne reflète en aucun cas un calcul réel de la CAF. Pour une estimation officielle, orientez l'usager vers caf.fr.
+        </div>
+        <button class="btn secondary" onclick="goTo('screen-sim')">‹ Refaire une simulation</button>
+        <button class="btn" style="margin-top:8px;" onclick="goTo('screen-home')">Retour à l'accueil</button>
+      </div>
+    </section>
+
+  </div>
+
+  <button class="chat-fab" title="Assistance (fictive)" onclick="alert('Assistant fictif — aucune conversation réelle dans cette démonstration.')">💬</button>
+
+<script>
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    document.getElementById('logoutBtn').style.display = (id === 'screen-login') ? 'none' : 'inline-block';
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    goTo('screen-home');
+  });
+
+  document.getElementById('quickLoginBtn').addEventListener('click', function () {
+    goTo('screen-home');
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    document.getElementById('loginForm').reset();
+    goTo('screen-login');
+  });
+
+  document.querySelectorAll('.acc-header').forEach(function (header) {
+    header.addEventListener('click', function () {
+      var body = document.getElementById(header.getAttribute('data-target'));
+      header.classList.toggle('open');
+      body.classList.toggle('open');
+    });
+  });
+
+  function togglePreview() {
+    document.getElementById('previewPanel').classList.toggle('open');
+  }
+
+  document.getElementById('simForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var enfants = parseInt(document.getElementById('simEnfants').value, 10) || 0;
+    var revenu = parseFloat(document.getElementById('simRevenu').value) || 0;
+    var loyer = parseFloat(document.getElementById('simLoyer').value) || 0;
+
+    var base = 320 + enfants * 60;
+    var abattement = revenu * 0.18;
+    var estimation = base - abattement;
+    estimation = Math.min(estimation, loyer * 0.9);
+    estimation = Math.max(0, Math.round(estimation * 100) / 100);
+
+    document.getElementById('resultFigure').textContent = estimation.toFixed(2).replace('.', ',') + ' €';
+    goTo('screen-result');
+  });
+</script>
+
+</body>
+</html>
