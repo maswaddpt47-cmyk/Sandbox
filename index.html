@@ -513,6 +513,11 @@
     font-size: 0.75rem;
     flex-shrink: 0;
   }
+  .droits-plus .droits-amount {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--text);
+  }
   .recours-btn {
     display: flex;
     justify-content: space-between;
@@ -661,7 +666,7 @@
           <div class="payment-card">
             <div class="label">Mon dernier paiement</div>
             <div class="date">le 05/07/2026</div>
-            <div class="amount">0,00 €</div>
+            <div class="amount">148,00 €</div>
             <button class="details-link" onclick="openDetail('d-acc-paiements')">Voir le détail ›</button>
           </div>
 
@@ -681,7 +686,7 @@
             <div class="watermark">Document fictif — non officiel</div>
             Prestation simulée : Prime d'activité (démo)<br>
             Période : Juin 2026<br>
-            Montant versé : 0,00 €<br>
+            Montant versé : 148,00 €<br>
             Bénéficiaire : Jean DUPONT (personnage fictif)
           </div>
         </div>
@@ -756,9 +761,8 @@
       <div class="accordion-section">
         <button class="acc-header open" data-target="d-acc-paiements">Mes paiements <span class="arrow">▾</span></button>
         <div class="acc-body open" id="d-acc-paiements">
-          <div class="detail-row"><span>Montant versé le 05/07/2026</span><b>0,00 €</b></div>
-          <div class="detail-row sub"><span><span class="dot">●</span>Prime d'activité (fictive)</span><span>685,40 €</span></div>
-          <div class="detail-row sub"><span><span class="dot">●</span>Retenue (fictive)</span><span>- 685,40 €</span></div>
+          <div class="detail-row"><span>Montant versé le 05/07/2026</span><b>148,00 €</b></div>
+          <div class="detail-row sub"><span><span class="dot">●</span>Prime d'activité (fictive)</span><span>148,00 €</span></div>
           <div class="detail-period">Pour la période <b>de Janvier 2026 à Juin 2026</b> (exemple)</div>
         </div>
       </div>
@@ -766,8 +770,8 @@
       <div class="accordion-section">
         <button class="acc-header" data-target="d-acc-droits">Mes droits <span class="arrow">▾</span></button>
         <div class="acc-body" id="d-acc-droits">
-          <div class="droits-month">Juillet 2026 (exemple)</div>
-          <div class="droits-plus"><span class="plus-icon">+</span> Aide au logement (démo)</div>
+          <div class="droits-month">Avril 2026 (exemple)</div>
+          <div class="droits-plus"><span class="plus-icon">+</span> Aide au logement (démo) <span class="droits-amount">148,00 €</span></div>
           <button class="recours-btn" onclick="alert('Écran fictif — présenterait les voies de recours possibles.')">Voies de recours <span>›</span></button>
           <div class="pagination-links">
             <button disabled>Précédent</button>
