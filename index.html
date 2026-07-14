@@ -428,6 +428,190 @@
     cursor: pointer;
     border: none;
   }
+
+  /* --- Écran de détail (paiements / droits / attestations) --- */
+  .detail-topbar {
+    background: var(--caf-navy);
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: -16px -16px 0;
+  }
+  .detail-topbar .caf-wordmark {
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+  .detail-topbar .caf-wordmark b { font-weight: 700; }
+  .detail-topbar .spacer { flex: 1; }
+  .detail-topbar .icon {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .breadcrumb {
+    padding: 14px 0 4px;
+  }
+  .breadcrumb button {
+    background: none;
+    border: none;
+    color: var(--caf-blue);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .detail-title {
+    color: var(--caf-blue);
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin: 8px 0 16px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+  .detail-row.sub {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    padding-left: 12px;
+  }
+  .detail-row.sub .dot {
+    color: var(--caf-blue);
+    margin-right: 4px;
+  }
+  .detail-period {
+    font-size: 0.85rem;
+    padding-top: 6px;
+  }
+
+  .droits-month { font-weight: 700; margin-bottom: 10px; }
+  .droits-plus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .droits-plus .plus-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--caf-blue);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+  .recours-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F4F5F7;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .pagination-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    font-size: 0.88rem;
+    margin: -40px 0 14px;
+  }
+  .pagination-links button {
+    background: none;
+    border: none;
+    color: var(--caf-blue);
+    cursor: pointer;
+    font-size: 0.88rem;
+    padding: 0;
+  }
+  .pagination-links button:disabled {
+    color: var(--text-light);
+    cursor: default;
+    opacity: 0.6;
+  }
+  .droits-note {
+    display: flex;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .attestation-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: var(--caf-blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+  .attestation-btn:hover { background: var(--caf-blue-dark); }
+  .attestation-btn .pdf-icon {
+    background: var(--demo-red);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 4px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .autres-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F4F5F7;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    color: var(--text);
+  }
+
+  .contact-banner {
+    background: var(--caf-navy);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
 </style>
 </head>
 <body>
@@ -478,14 +662,7 @@
             <div class="label">Mon dernier paiement</div>
             <div class="date">le 06/07/2026</div>
             <div class="amount">152,30 €</div>
-            <button class="details-link" onclick="togglePreview()">Voir le détail ›</button>
-            <div class="preview-panel" id="previewPanel">
-              <div class="watermark">Document fictif — non officiel</div>
-              Prestation simulée : Aide au logement (démo)<br>
-              Période : Juin 2026<br>
-              Montant versé : 152,30 €<br>
-              Bénéficiaire : Jean DUPONT (personnage fictif)
-            </div>
+            <button class="details-link" onclick="openDetail('d-acc-paiements')">Voir le détail ›</button>
           </div>
 
           <div class="qf-line">
@@ -494,12 +671,19 @@
           </div>
 
           <div class="row-list">
-            <button class="row-item" onclick="alert('Écran fictif — dans la vraie démonstration, ceci afficherait le détail des paiements et droits.')">Mes paiements et droits <span class="chevron">›</span></button>
-            <button class="row-item active-row" onclick="alert('Écran fictif — attestations simulées, aucun document réel.')">Mes attestations <span class="chevron">›</span></button>
-            <button class="row-item" onclick="alert('Écran fictif — ressources déclarées simulées.')">Mes ressources <span class="chevron">›</span></button>
+            <button class="row-item" onclick="openDetail('d-acc-paiements')">Mes paiements et droits <span class="chevron">›</span></button>
+            <button class="row-item active-row" onclick="openDetail('d-acc-attestations')">Mes attestations <span class="chevron">›</span></button>
+            <button class="row-item" onclick="openDetail('d-acc-ressources')">Mes ressources <span class="chevron">›</span></button>
           </div>
 
           <button class="pdf-btn" onclick="togglePreview()">📄 Télécharger mon relevé de compte (fictif)</button>
+          <div class="preview-panel" id="previewPanel">
+            <div class="watermark">Document fictif — non officiel</div>
+            Prestation simulée : Aide au logement (démo)<br>
+            Période : Juin 2026<br>
+            Montant versé : 152,30 €<br>
+            Bénéficiaire : Jean DUPONT (personnage fictif)
+          </div>
         </div>
       </div>
 
@@ -551,6 +735,76 @@
       </div>
 
       <div class="footer-hint">Toutes les informations affichées sont fictives et générées pour un atelier de médiation numérique.</div>
+    </section>
+
+    <!-- ÉCRAN 2bis : DÉTAIL PAIEMENTS / DROITS / ATTESTATIONS -->
+    <section id="screen-detail" class="screen">
+      <div class="detail-topbar">
+        <span class="caf-wordmark">caf<b>·</b>fr</span>
+        <span class="spacer"></span>
+        <span class="icon">✉️</span>
+        <span class="icon">👤</span>
+        <span class="icon">🔍</span>
+      </div>
+
+      <div class="breadcrumb">
+        <button onclick="goTo('screen-home')">‹ Retour Mon compte allocataire</button>
+      </div>
+
+      <h1 class="detail-title">Mes paiements et mes droits</h1>
+
+      <div class="accordion-section">
+        <button class="acc-header open" data-target="d-acc-paiements">Mes paiements <span class="arrow">▾</span></button>
+        <div class="acc-body open" id="d-acc-paiements">
+          <div class="detail-row"><span>Montant versé le 06/07/2026</span><b>152,30 €</b></div>
+          <div class="detail-row sub"><span><span class="dot">●</span>Prime d'activité (fictive)</span><span>420,00 €</span></div>
+          <div class="detail-row sub"><span><span class="dot">●</span>Retenue (fictive)</span><span>- 267,70 €</span></div>
+          <div class="detail-period">Pour la période <b>de Juin 2026 à Juillet 2026</b> (exemple)</div>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="d-acc-droits">Mes droits <span class="arrow">▾</span></button>
+        <div class="acc-body" id="d-acc-droits">
+          <div class="droits-month">Juillet 2026 (exemple)</div>
+          <div class="droits-plus"><span class="plus-icon">+</span> Aide au logement (démo)</div>
+          <button class="recours-btn" onclick="alert('Écran fictif — présenterait les voies de recours possibles.')">Voies de recours <span>›</span></button>
+          <div class="pagination-links">
+            <button disabled>Précédent</button>
+            <button onclick="alert('Navigation fictive entre les mois de droits.')">Suivant</button>
+          </div>
+          <div class="droits-note"><span class="info-dot">i</span> Vos droits sont calculés à partir de données fictives, à des fins pédagogiques uniquement.</div>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="d-acc-evolution">Évolution de mes droits <span class="arrow">▾</span></button>
+        <div class="acc-body" id="d-acc-evolution">
+          <div class="detail-row"><span>Juin 2026 (exemple)</span><span>152,30 €</span></div>
+          <div class="detail-row"><span>Mai 2026 (exemple)</span><span>148,00 €</span></div>
+          <div class="detail-row"><span>Avril 2026 (exemple)</span><span>148,00 €</span></div>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header open" data-target="d-acc-attestations">Mes attestations <span class="arrow">▾</span></button>
+        <div class="acc-body open" id="d-acc-attestations">
+          <button class="attestation-btn" onclick="alert('Document fictif — aucune vraie attestation générée dans cette démonstration.')"><span class="pdf-icon">PDF</span> Mon dernier paiement</button>
+          <button class="attestation-btn" onclick="alert('Document fictif — aucune vraie attestation générée dans cette démonstration.')"><span class="pdf-icon">PDF</span> Mon quotient familial</button>
+          <button class="autres-row" onclick="alert('Écran fictif — lien vers d\'autres attestations simulées.')">Autres attestations <span>›</span></button>
+        </div>
+      </div>
+
+      <div class="accordion-section">
+        <button class="acc-header" data-target="d-acc-ressources">Mes ressources <span class="arrow">▾</span></button>
+        <div class="acc-body" id="d-acc-ressources">
+          <div class="detail-row"><span>Revenus déclarés 2025 (fictifs)</span><b>14 500 €</b></div>
+          <div class="detail-row"><span>Situation professionnelle (fictive)</span><span>Salarié</span></div>
+          <p>Ces montants sont des exemples utilisés uniquement pour la démonstration.</p>
+        </div>
+      </div>
+
+      <button class="contact-banner" onclick="goTo('screen-home')">Vous pouvez nous contacter ›</button>
     </section>
 
     <!-- ÉCRAN 3 : SIMULATEUR -->
@@ -633,6 +887,16 @@
 
   function togglePreview() {
     document.getElementById('previewPanel').classList.toggle('open');
+  }
+
+  function openDetail(sectionId) {
+    document.querySelectorAll('#screen-detail .acc-header').forEach(function (header) {
+      var isTarget = header.getAttribute('data-target') === sectionId;
+      var body = document.getElementById(header.getAttribute('data-target'));
+      header.classList.toggle('open', isTarget);
+      body.classList.toggle('open', isTarget);
+    });
+    goTo('screen-detail');
   }
 
   document.getElementById('simForm').addEventListener('submit', function (e) {
